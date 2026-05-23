@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  COUNSELOR
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(COUNSELOR)
+  createdAt DateTime @default(now())
+  leads     Lead[]   @relation("CounselorLeads")
+}
+
+model Lead {
+  id          String     @id @default(uuid())
+  name        String
+  email       String
+  phone       String
+  course      String
+  stage       String     // "New Lead", "Interested", "Call Back", "Follow-Up", "Walk-In Scheduled", "Walk-In Missed", "Visited", "Converted", "Not Interested", "Lost Lead", "Re-Engagement"
+  priority    String     // "High", "Medium", "Low"
+  counselorId String?
+  counselor   User?      @relation("CounselorLeads", fields: [counselorId], references: [id], onDelete: SetNull)
+  followUps   FollowUp[]
+  createdAt   DateTime   @default(now())
+}
+
+model FollowUp {
+  id               String   @id @default(uuid())
+  comment          String
+  status           String   // "Planned", "Completed"
+  nextFollowUpDate DateTime
+  leadId           String
+  lead             Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  createdAt        DateTime @default(now())
+}
+
