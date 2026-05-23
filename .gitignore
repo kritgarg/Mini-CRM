@@ -1,0 +1,16 @@
+# Ignore dependencies globally
+node_modules/
+
+# Ignore local environment files globally
+.env
+.env.local
+.env.*.local
+
+# Ignore Next.js build output
+.next/
+out/
+build/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
