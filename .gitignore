@@ -14,3 +14,6 @@ build/
 # Ignore system files
 .DS_Store
 Thumbs.db
+
+# Ignore local scripts
+make_history.sh
